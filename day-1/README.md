@@ -61,3 +61,11 @@ curl -X POST http://localhost:3000/users \
 | DB_PASSWORD | _(empty)_   | MySQL password       |
 | DB_NAME     | testdb      | Database name        |
 | PORT        | 3000        | Express server port  |
+
+### Docker
+
+docker context use my-vps
+docker build -t nodemysql:1.0 .
+docker network create mysql-server_mysql-network 
+docker run -d --name day1container --network mysql-server_mysql-network --env-file .env nodemysql:1.0
+docker logs day1container
