@@ -1,0 +1,49 @@
+services:
+  web:
+    image: nginx
+    container_name: frontend
+    ports:
+      - 8000:80
+    depends_on:
+      - api
+    volumes:
+      - ./logs:/var/log/nginx/
+    networks:
+      - frontend-network
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: day2-api
+    ports:
+      - 3001:3000
+    depends_on:
+      mysql-db:
+        condition: service_healthy   # wait until MySQL is actually ready
+    env_file:
+      - .env
+    networks:
+      - compose-networks
+      - frontend-network
+
+  mysql-db:
+    image: mysql:8.0
+    container_name: mysql-dbo       # matches DB_HOST=mysql-db in .env
+    environment:
+      MYSQL_ROOT_PASSWORD: dev1234
+      MYSQL_DATABASE: appdb
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-pdev1234"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - compose-networks
+
+networks:
+  compose-networks:
+  frontend-network:
