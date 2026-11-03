@@ -64,6 +64,32 @@ kubectl delete -f <manifest.yaml>
 kubectl get events --sort-by=.metadata.creationTimestamp
 ```
 
+## Imparativly creating the pods
+```bash
+kubectl run pod-name --image=nginx
+kubectl get pod
+# if done using the yaml
+kubectl apply -f fileloaction.yml
+kubectl get pod -o wide
+kubectl describe object-name
+kubectl logs pod-name
+kubectl logs pod-name -c container-name # if we have multiple container
+kubectl delete pods pod-name
+```
+
+## how to run comands inside the pod using --
+# --: Indicates the end of kubectl options and the start of the command to execute inside the container.
+```sh
+kubectl exec my-pod-2 -- ls
+kubectl exec my-pod-2 -c container-name -- ls
+# login into the pods
+kubectl exec -it my-pod2 -- /bin/bash
+kubectl exec -it my-pod-2 -c container-name -- /bin/bash
+
+
+```
+
+
 ## Access a service
 
 ```bash
@@ -86,3 +112,4 @@ kind export logs ./kind-logs --name dev
 # Check the current Kubernetes context
 kubectl config current-context
 ```
+
