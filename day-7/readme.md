@@ -1,15 +1,3 @@
-```bash
-kubectl apply -f rc/rc.yml
- kubectl get pods --show-labels
-kubectl describe rc nginx-rc
- kubectl get rc -o yml
- kubectl scale rc nginx-rc --replicas 5
- kubectl set image rc nginx-rc nginx=1.22
- kubectl edit rc nginx-rc
-
-#  to see the api services
-kubectl api-resources
-```
 
 ```bash
 kubectl rollout -h
@@ -33,5 +21,7 @@ Available sub Commands:
 #  rolling update
 kubectl set image deployments nginx-deployment containername=nginx1.22
 kubectl annotate deployments.apps nginx-deployment kubernetes.io/change-cause="update the nginx from v1.19 to 1.22 "
+kubectl rollout history deployment nginx-deployment
+kubectl rollout undo deployment nginx-deployment --to-revision=1
 
 ```
