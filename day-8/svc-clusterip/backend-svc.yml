@@ -1,0 +1,12 @@
+apiVersion:
+kind:
+metadata:
+  name: backend-svc
+spec:
+  selector:
+    app: backend-app
+  ports:
+    - protocol: TCP
+      port: 80 # expose the service on port 80
+      targetPort: 8080 # the port on which the backend container is listening
+

@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: frontend-app
+  template:
+    metadata:
+      labels:
+        app: frontend-app
+    spec:
+      containers:
+        - name: frontend-container
+          image: nginx:1.21
+          ports:
+            - containerPort: 80
+--- # yml separator
+# writing a service to expose the frontend deployment
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-svc
+spec:
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 80 # expose the service on port 80
+      targetPort: 80 # the port on which the frontend container is listening
+      nodePort: 30080 # the port on which the service is exposed on the node
+  selector:
+    app: frontend-app

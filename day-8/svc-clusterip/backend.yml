@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-app
+  template:
+    metadata:
+      labels:
+        app: backend-app
+    spec:
+      containers:
+        - name: backend-container
+          image: hashicorp/http-echo
+          args:
+            - "-text=Hello from the backend!"
+          ports:
+            - containerPort: 5678
+
+--- # yml separator
+# writing a service to expose the backend deployment
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-svc
+spec:
+  #  tps in vm (Transpertent page sharing )={ type , ports , selector }
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 9090 # expose the service on port 80
+      targetPort: 5678 # the port on which the backend container is listening
+  selector:
+  # hello ji
+    app: backend-app

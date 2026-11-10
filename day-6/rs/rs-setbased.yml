@@ -1,11 +1,13 @@
 apiVersion: apps/v1
 kind: ReplicaSet
 metadata:
-name: example-rs
+  name: example-rs
 spec:
   replicas: 3
   selector:
-  matchExpressions:
+    matchLabels:
+      app: nginx
+    matchExpressions:
     - key: app
       operator: In
       values:
