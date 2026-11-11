@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-static-pod-with-command
+
+spec:
+  nodeName: kind-worker
+  containers:
+  - name: static-nginx
+    image: nginx
+    ports:
+    - containerPort: 80
+
+
+# to apply this static pod, place the above yaml file in /etc/kubernetes/manifests/ directory of the node where you want to run this pod. The kubelet will automatically create the pod from this manifest.

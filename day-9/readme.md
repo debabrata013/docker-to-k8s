@@ -13,7 +13,21 @@ kubectl expose deployment -h
 ### Flags
 
 - `--dry-run=client` builds and validates the Deployment locally without creating it in the Kubernetes cluster. Add `-o yaml` to print the generated manifest.
+- `--dry-run=server` sends the request to the Kubernetes API server for validation and admission processing without persisting the resource.
+
+
 - `--port=5678` records the container port in the Deployment specification. It is metadata/documentation only; it does not expose the port or create a Service.
 
 
-practice the k8s services and also understand how to generate the yml from the imparative commands , how to validate the imparative command using the dryrun flag
+
+
+
+```sh
+kubectl get nodes
+# NAME                 STATUS   ROLES           AGE     VERSION
+# kind-control-plane   Ready    control-plane   6d23h   v1.31.0
+# kind-worker          Ready    <none>          6d23h   v1.31.0
+# kind-worker2         Ready    <none>          6d23h   v1.31.0
+
+
+```
