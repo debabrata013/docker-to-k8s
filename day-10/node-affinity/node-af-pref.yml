@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ns-deploy
+spec:
+  replicas: 30
+  selector:
+    matchLabels:
+      app: app1
+      # anything under this template will be applied to the pods created by this deployment
+  template:
+    metadata:
+      labels:
+        app: app1
+    spec:
+      # nodeSelector:
+      #  storage: ssd
+      #  env: prod
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: storage
+                operator: In
+                values:
+                - ssd
+                - hdd
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              preference:
+                matchExpressions:
+                - key: storage
+                  operator: In
+                  values:
+                  - ssd
+            - weight: 12
+              preference:
+                matchExpressions:
+                - key: storage
+                  operator: In
+                  values:
+                  - hdd
+  #  weight defines the priority of the preferred node affinity rules. A higher weight means a higher priority for that preference. and it ranges from 1 to 100. (1 being the lowest priority and 100 being the highest priority).
+
+      containers:
+        - name: ns-deployment
+          image: nginx
+
