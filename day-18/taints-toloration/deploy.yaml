@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app1-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: app1
+  template:
+    metadata:
+      labels:
+        app: app1
+    spec:
+      tolerations:
+      # This toleration allows the pod to be scheduled on nodes that have the taint with key "storage", operator "Exists", value "ssd", and effect "NoSchedule". This means that the pod can tolerate the taint and will be scheduled on nodes that have this specific taint applied.
+      #  we use double quotes for key and value to avoid any issues with special characters or spaces in the key or value. The operator "Exists" means that the toleration will match any taint with the specified key, regardless of its value. The effect "NoSchedule" means that the pod will not be scheduled on nodes that have this taint unless it has a matching toleration.
+        - key: "storage"
+          operator: "Equal"
+          value: "ssd"
+          effect: "NoSchedule"
+
+      containers:
+        - name: app1-deployment-pod
+          image: nginx
+          ports:
+          - containerPort: 80
+---
+# kubectl taint node kind-worker storage=ssd:NoSchedule
+# COVE light :-> KOVE { key , operator , value , effect }
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-tpod
+  labels:
+    app.kubernetes.io/name: my-tpod
+spec:
+  tolerations:
+    - key: "storage"
+      operator: "Exists"
+      effect: "NoSchedule"
+  containers:
+  - name: my-tpod
+    image: nginx
+# operator: "Exists" vs operator: "Equal"
+# "Exists" matches any taint with the specified key, regardless of its value.
+# "Equal" matches a taint with the specified key and value.
+
+# effect: "NoSchedule" means that the pod will not be scheduled on nodes that have this taint unless it has a matching toleration. 

@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: envdev
+spec:
+  selector:
+    matchLabels:
+      app: envop
+  template:
+    metadata:
+      labels:
+        app: envop
+    spec:
+      tolerations:
+        - key: "storage"
+          operator: "Equal"
+          value: "hdd"
+          effect: "NoSchedule"
+        - key: "env"
+          effect: "NoSchedule"
+          operator: "Equal"
+          value: "dev"
+      containers:
+      - name: dev
+        image: nginx
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 90
